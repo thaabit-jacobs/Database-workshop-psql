@@ -1,0 +1,32 @@
+create or replace function 
+	link_teacher_to_subject(the_teacher_id int, the_subject_id int)
+	returns boolean as
+
+$$
+declare
+teachCount int;
+subjCount int;
+total int;
+
+begin
+	select into teachCount count(*) teacher_subject where teacher_id=the_teacher_id;
+	select into subjCount count(*) teacher_subject where subject_id=the_subject_id;
+	
+	select into total count(*) from teacher 
+	join teacher_subject
+	on teacher.id = teacher_subject.teacher_id
+	join subject
+	on teacher_subject.subject_id = subject.id
+	where LOWER(subject.name)=LOWER(subj);
+
+	if(total = 0 and teachCount = 1 and subjCount = 1)
+		insert into teacher_subject (teacher_id, subject_id) values(the_teacher_id int, the_subject_id int);
+		return true;
+	else
+		return false;
+	end if;
+
+end;
+$$
+
+Language plpgsql;
