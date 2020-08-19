@@ -1,7 +1,6 @@
 create or replace function find_subjects ()
 	returns table (
-		id int,
-		name text
+		subject_row subject_type
 	) as
 $$
 begin
